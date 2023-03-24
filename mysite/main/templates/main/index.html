@@ -1,0 +1,51 @@
+{% load i18n %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<header>
+    <div>
+        <form action="{% url 'index' %}">
+            <input type="search" name="search">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+    <div>
+        <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
+            <input name="next" type="hidden" value="{{ redirect_to }}">
+        <select name="language">
+            {% get_current_language as LANGUAGE_CODE %}
+            {% get_available_languages as LANGUAGES %}
+            {% get_language_info_list for LANGUAGES as languages %}{% for language in languages %}
+        <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %}
+        selected{% endif %}>
+            {{ language.name_local }} ({{ language.code }})
+        </option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Go">
+        </form>
+    </div>
+</header>
+<body>
+
+
+    <div align="center">
+        {% for i in nout_list %}
+            {% if i.check_nout %}
+            <p>
+                <a href="{% url 'index_detail' i.slug %}"><img src="{{ i.img.url }}" width="200px" alt=""></a>
+                <h4>{{ i.name }}</h4>
+                <hr>
+            </p>
+            {% endif %}
+        {% endfor %}
+    </div>
+</body>
+</html>
